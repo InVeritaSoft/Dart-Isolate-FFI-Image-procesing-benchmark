@@ -1,0 +1,16 @@
+{
+  "buildFiles": [
+    "/Users/nazarko/FlutterProjects/demo_2_images/my_plugins/images_filter/android/CMakeLists.txt"
+  ],
+  "cleanCommands": [
+    "/Users/nazarko/Android/sdk/cmake/3.6.4111459/bin/cmake --build /Users/nazarko/FlutterProjects/demo_2_images/my_plugins/images_filter/android/.cxx/cmake/debug/x86_64 --target clean"
+  ],
+  "libraries": {
+    "images_filter-Debug-x86_64": {
+      "artifactName": "images_filter",
+      "buildCommand": "/Users/nazarko/Android/sdk/cmake/3.6.4111459/bin/cmake --build /Users/nazarko/FlutterProjects/demo_2_images/my_plugins/images_filter/android/.cxx/cmake/debug/x86_64 --target images_filter",
+      "abi": "x86_64",
+      "output": "/Users/nazarko/FlutterProjects/demo_2_images/build/images_filter/intermediates/cmake/debug/obj/x86_64/libimages_filter.so"
+    }
+  }
+}

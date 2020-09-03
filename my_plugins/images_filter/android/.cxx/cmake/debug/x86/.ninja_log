@@ -1,0 +1,9 @@
+# ninja log v5
+0	86	0	CMakeFiles/images_filter.dir/Users/nazarko/FlutterProjects/demo_2_images/my_plugins/images_filter/ios/Classes/images_filter.cpp.o	d48f771483b24276
+87	109	0	/Users/nazarko/FlutterProjects/demo_2_images/build/images_filter/intermediates/cmake/debug/obj/x86/libimages_filter.so	18340889b7c440d7
+1	538	0	CMakeFiles/images_filter.dir/Users/nazarko/FlutterProjects/demo_2_images/my_plugins/images_filter/ios/Classes/images_filter.cpp.o	d48f771483b24276
+538	618	0	/Users/nazarko/FlutterProjects/demo_2_images/build/images_filter/intermediates/cmake/debug/obj/x86/libimages_filter.so	18340889b7c440d7
+0	105	0	CMakeFiles/images_filter.dir/Users/nazarko/FlutterProjects/demo_2_images/my_plugins/images_filter/ios/Classes/images_filter.cpp.o	d48f771483b24276
+105	234	0	/Users/nazarko/FlutterProjects/demo_2_images/build/images_filter/intermediates/cmake/debug/obj/x86/libimages_filter.so	18340889b7c440d7
+0	104	0	CMakeFiles/images_filter.dir/Users/nazarko/FlutterProjects/demo_2_images/my_plugins/images_filter/ios/Classes/images_filter.cpp.o	d48f771483b24276
+104	182	0	/Users/nazarko/FlutterProjects/demo_2_images/build/images_filter/intermediates/cmake/debug/obj/x86/libimages_filter.so	18340889b7c440d7

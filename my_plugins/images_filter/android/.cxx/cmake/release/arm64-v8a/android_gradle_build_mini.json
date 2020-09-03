@@ -1,0 +1,16 @@
+{
+  "buildFiles": [
+    "/Users/nazarko/FlutterProjects/demo_2_images/my_plugins/images_filter/android/CMakeLists.txt"
+  ],
+  "cleanCommands": [
+    "/Users/nazarko/Android/sdk/cmake/3.6.4111459/bin/cmake --build /Users/nazarko/FlutterProjects/demo_2_images/my_plugins/images_filter/android/.cxx/cmake/release/arm64-v8a --target clean"
+  ],
+  "libraries": {
+    "images_filter-Release-arm64-v8a": {
+      "artifactName": "images_filter",
+      "buildCommand": "/Users/nazarko/Android/sdk/cmake/3.6.4111459/bin/cmake --build /Users/nazarko/FlutterProjects/demo_2_images/my_plugins/images_filter/android/.cxx/cmake/release/arm64-v8a --target images_filter",
+      "abi": "arm64-v8a",
+      "output": "/Users/nazarko/FlutterProjects/demo_2_images/build/images_filter/intermediates/cmake/release/obj/arm64-v8a/libimages_filter.so"
+    }
+  }
+}

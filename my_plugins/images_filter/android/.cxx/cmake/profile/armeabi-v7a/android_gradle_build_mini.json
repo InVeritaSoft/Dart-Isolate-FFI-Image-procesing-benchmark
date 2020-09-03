@@ -1,0 +1,16 @@
+{
+  "buildFiles": [
+    "/Users/nazarko/FlutterProjects/demo_2_images/my_plugins/images_filter/android/CMakeLists.txt"
+  ],
+  "cleanCommands": [
+    "/Users/nazarko/Android/sdk/cmake/3.6.4111459/bin/cmake --build /Users/nazarko/FlutterProjects/demo_2_images/my_plugins/images_filter/android/.cxx/cmake/profile/armeabi-v7a --target clean"
+  ],
+  "libraries": {
+    "images_filter-Debug-armeabi-v7a": {
+      "artifactName": "images_filter",
+      "buildCommand": "/Users/nazarko/Android/sdk/cmake/3.6.4111459/bin/cmake --build /Users/nazarko/FlutterProjects/demo_2_images/my_plugins/images_filter/android/.cxx/cmake/profile/armeabi-v7a --target images_filter",
+      "abi": "armeabi-v7a",
+      "output": "/Users/nazarko/FlutterProjects/demo_2_images/build/images_filter/intermediates/cmake/profile/obj/armeabi-v7a/libimages_filter.so"
+    }
+  }
+}
