@@ -1,7 +1,11 @@
+import 'dart:ffi';
 import 'dart:math';
 import 'dart:typed_data';
 
+import 'package:demo_2_images/value.dart';
+import 'package:ffi/ffi.dart';
 import 'package:image/image.dart' as imageLib;
+import 'package:images_filter/images_filter.dart';
 
 final List<num> weights = [0, 1, 0, 1, -4, 1, 0, 1, 0];
 final num bias = 0.0;
@@ -88,8 +92,37 @@ List<num> _normalizeKernel(List<num> kernel) {
 }
 
 List<int> applyFilter(Map<String, dynamic> params) {
-  imageLib.Image image = params["image"];
-  List<int> _bytes = image.getBytes();
-  _apply(_bytes, image.width, image.height,weights,bias);
-  return _bytes;
+  ProgramingOption programingOption = params['programingOption'];
+
+  if (programingOption == ProgramingOption.pure_dart){
+    imageLib.Image image = params["image"];
+    List<int> _bytes = image.getBytes();
+    _apply(_bytes, image.width, image.height,weights,bias);
+    return _bytes;
+  }
+
+  if (programingOption == ProgramingOption.FFI){
+    Pointer<Int8> _weights =  allocate(count: weights.length);
+    for(int i = 0; i < weights.length; i++){
+      _weights[i] = weights[i];
+    }
+    imageLib.Image image = params["image"];
+    List<int> _bytes = params["image"].getBytes();
+    Pointer<Uint8> _data =  allocate(count: _bytes.length);
+    for(int i = 0; i < _bytes.length; i++){
+      _data[i] = _bytes[i];
+    }
+    var result = ImagesFilter().applyImageFilter(
+        _data,
+        _bytes.length,
+        image.width,
+        image.height,
+        _weights,
+        weights.length,
+        bias);
+    result.asTypedList(_bytes.length);
+    free(_data);
+    free(_weights);
+    return result.asTypedList( _bytes.length,);
+  }
 }

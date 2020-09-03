@@ -1,17 +1,18 @@
 import 'dart:io';
 
 import 'package:demo_2_images/benchmark_widget.dart';
+import 'package:demo_2_images/value.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image/image.dart' as imageLib;
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 
-import 'case_four.dart';
-import 'case_one.dart';
-import 'case_three.dart';
-import 'case_two.dart';
-import 'ffi_one.dart';
+import 'old_widgets/case_four.dart';
+import 'old_widgets/case_one.dart';
+import 'old_widgets/case_three.dart';
+import 'old_widgets/case_two.dart';
+import 'old_widgets/ffi_one.dart';
 import 'image_filter.dart';
 
 void main() {
@@ -55,6 +56,7 @@ class _ImageFilterPageState extends State<ImageFilterPage> {
   ExecutionContext selectedExecutionContext;
   ProgramingOption selectedProgramingOption;
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -89,13 +91,16 @@ class _ImageFilterPageState extends State<ImageFilterPage> {
           _buildAlgorithmDropDown(),
           _buildExecutionContextDropDown(),
           _buildProgramingOptionDropDown(),
-          Visibility(
-            visible: (selectedQuality != null)
+      
+          if ((selectedQuality != null)
                 && (selectedAlgorithm != null)
                 && (selectedExecutionContext != null)
-                && (selectedProgramingOption != null),
-            child: BenchmarkWidget(filename: filename,image: image,),
-          )
+                && (selectedProgramingOption != null))
+             BenchmarkWidget(
+               command: executionContextMap[selectedExecutionContext]
+                 ..filename = filename
+                 ..image = image,
+             ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -284,28 +289,8 @@ class _ImageFilterPageState extends State<ImageFilterPage> {
 
 }
 
-enum ImageQuality{
-  teen_percent,
-  fifty_percent,
-  hundred_percent
-}
 
-enum Algorithm{
-  laplacian_edge_detection
-}
 
-enum ExecutionContext{
-  mainThread,
-  oneIsolate,
-  reusedIsolate,
-  reusedMultiIsolates
-}
-
-enum  ProgramingOption{
-  pure_dart,
-  FFI,
-  GPU,
-}
 //
 //class MyHomePage extends StatefulWidget {
 //  MyHomePage({Key key, this.title}) : super(key: key);

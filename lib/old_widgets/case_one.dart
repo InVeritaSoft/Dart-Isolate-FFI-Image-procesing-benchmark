@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:image/image.dart' as imageLib;
-import 'image_filter.dart';
+import '../image_filter.dart';
 
 class One extends StatefulWidget {
 

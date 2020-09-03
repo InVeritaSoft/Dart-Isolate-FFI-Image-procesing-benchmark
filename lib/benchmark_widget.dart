@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:image/image.dart' as imageLib;
+import 'commands.dart';
 import 'image_filter.dart';
+import 'package:image/image.dart' as imageLib;
 
 class BenchmarkWidget extends StatefulWidget {
 
-  final imageLib.Image  image;
-  final String filename;
+  final ExecutionContextCommand command;
 
-  const BenchmarkWidget({Key key, this.image, this.filename  = ''}) : super(key: key);
+  const BenchmarkWidget({Key key, this.command}) :
+      super(key: key);
 
   @override
   _BenchmarkWidgetState createState() => _BenchmarkWidgetState();
 }
 
 class _BenchmarkWidgetState extends State<BenchmarkWidget> {
-  var parsesPer10Second = 0;
+  var applyFilterPer10Second = 0;
   bool isStarted = false;
 
   @override
@@ -30,8 +31,9 @@ class _BenchmarkWidgetState extends State<BenchmarkWidget> {
                 _run();
               });
             }),
+        if (isStarted)
         Text(
-          '$parsesPer10Second',
+          'Apply filter per 10 Seconds: $applyFilterPer10Second',
         ),
       ],
     );
@@ -41,13 +43,13 @@ class _BenchmarkWidgetState extends State<BenchmarkWidget> {
     var lastFrameTime = DateTime.now().millisecondsSinceEpoch;
     var parses = 0;
     while (isStarted) {
-      convertImage();
+      await widget.command.execute();
       parses++;
       final time = DateTime.now().millisecondsSinceEpoch;
       if ((time - lastFrameTime) > (10000 + 1)) {
         print(parses);
         setState(() {
-          parsesPer10Second = parses;
+          applyFilterPer10Second = parses;
         });
         parses = 0;
         lastFrameTime = time;
@@ -56,11 +58,13 @@ class _BenchmarkWidgetState extends State<BenchmarkWidget> {
     }
   }
 
-  /// Main thread
-  void convertImage() {
-    applyFilter(<String, dynamic>{
-      "image": widget.image,
-      "filename": widget.filename,
-    });
-  }
+//  /// Main thread
+//  convertImage() async{
+//    applyFilter(<String, dynamic>{
+//      "image": widget.image,
+//      "filename": widget.filename,
+//    });
+//  }
 }
+
+

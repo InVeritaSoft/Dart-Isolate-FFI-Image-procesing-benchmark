@@ -1,25 +1,23 @@
-
-import 'dart:async';
 import 'dart:isolate';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:image/image.dart' as imageLib;
-import 'image_filter.dart';
+import '../image_filter.dart';
 
-class Four extends StatefulWidget {
+class Three extends StatefulWidget {
 
   final imageLib.Image image;
   final String filename;
 
-  const Four({Key key, this.image, this.filename = ''}) : super(key: key);
+  const Three({Key key, this.image, this.filename = ''}) : super(key: key);
 
   @override
-  _FourState createState() => _FourState();
+  _ThreeState createState() => _ThreeState();
 }
 
-class _FourState extends State<Four> {
+class _ThreeState extends State<Three> {
   var parsesPer10Second = 0;
 
   @override
@@ -61,19 +59,9 @@ class _FourState extends State<Four> {
     }
   }
 
-  /// Reused multi-isolate
+  /// Reused isolate
 
-  static List<SendPort> availableSendPorts;
-  static final sendPortStream = StreamController<void>.broadcast();
-
-  static Future<SendPort> intialize() async {
-    final receivePort = ReceivePort();
-    await Isolate.spawn(
-      isolateCallback,
-      receivePort.sendPort,
-    );
-    return await receivePort.first;
-  }
+  static SendPort sendPort;
 
   static void isolateCallback(SendPort sendPort) {
     final receivePort = ReceivePort();
@@ -86,37 +74,29 @@ class _FourState extends State<Four> {
   }
 
   static Future<void> init() async {
-    availableSendPorts = await Future.wait([
-      intialize(),
-      intialize(),
-      intialize(),
-      intialize(),
-      intialize(),
-      intialize(),
-      intialize(),
-      intialize(),
-    ]);
+    final receivePort = ReceivePort();
+
+    await Isolate.spawn(
+      isolateCallback,
+      receivePort.sendPort,
+    );
+
+    sendPort = await receivePort.first;
   }
 
   Future<void> convertImage() async {
-    if (availableSendPorts == null) {
+    if (sendPort == null) {
       await init();
     }
-    // Wait until one is available
-    if (availableSendPorts.isEmpty) {
-      await sendPortStream.stream.first;
-    }
-    final sendPort = availableSendPorts.removeAt(0);
+
     final receivePort = ReceivePort();
+
     sendPort.send(ImageIsolateMessage(receivePort.sendPort, <String, dynamic>{
       "image": widget.image,
       "filename": widget.filename,
     }));
-    receivePort.first.then((value){
-       availableSendPorts.add(sendPort);
-       sendPortStream.add(null);
-    });
 
+    await receivePort.first;
   }
 }
 
