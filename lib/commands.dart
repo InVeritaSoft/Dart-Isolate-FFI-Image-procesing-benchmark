@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:isolate';
+import 'dart:typed_data';
 
 import 'package:demo_2_images/value.dart';
 import 'package:flutter/foundation.dart';
@@ -144,6 +145,7 @@ class ReusedMultiIsolatesCommand extends ExecutionContextCommand{
 }
 
 class ImageIsolateMessage {
+
   final SendPort sender;
   final Map<String, dynamic> map;
 

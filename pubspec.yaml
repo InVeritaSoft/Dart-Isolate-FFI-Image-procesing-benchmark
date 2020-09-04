@@ -28,7 +28,7 @@ dependencies:
   images_filter:
     path: my_plugins/images_filter
 #  photofilters: ^2.0.1
-  native_filters: ^0.0.4+alpha
+#  native_filters: ^0.0.4+alpha
   image_picker:
   path_provider:
 

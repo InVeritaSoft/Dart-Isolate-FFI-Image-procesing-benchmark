@@ -5,9 +5,8 @@ import 'dart:typed_data';
 import 'package:demo_2_images/value.dart';
 import 'package:ffi/ffi.dart';
 import 'package:image/image.dart' as imageLib;
-import 'package:image/image.dart';
 import 'package:images_filter/images_filter.dart';
-import 'package:native_filters/native_filters.dart';
+//import 'package:native_filters/native_filters.dart';
 
 final List<num> weights = [0, 1, 0, 1, -4, 1, 0, 1, 0];
 final num bias = 0.0;
@@ -105,8 +104,8 @@ List<num> _normalizeKernel(List<num> kernel) {
 
 class FilterApplayer{
 
-  final _filtersFactory = const FilterFactory();
-  Filter _filter;
+//  final _filtersFactory = const FilterFactory();
+//  Filter _filter;
 
   static final FilterApplayer _singleton = FilterApplayer._internal();
 
@@ -116,17 +115,23 @@ class FilterApplayer{
 
   FilterApplayer._internal();
 
-  init() async{
-    _filter = await _filtersFactory.create('GPUImageLaplacianFilter');
-  }
+//  init() async{
+//    _filter = await _filtersFactory.create('GPUImageLaplacianFilter');
+//  }
 
-
+  imageLib.Image cacheImage;
+  Uint8List _bytes;
 
   List<int> applyFilter(Map<String, dynamic> params) {
     ProgramingOption programingOption = params['programingOption'];
+    imageLib.Image image = params["image"];
+    if(image.width != cacheImage?.width){
+      print('Caching images');
+      cacheImage = image;
+      _bytes = image.getBytes();
+    }
+
     if (programingOption == ProgramingOption.pure_dart) {
-      imageLib.Image image = params["image"];
-      var _bytes = image.getBytes();
       _apply(_bytes, image.width, image.height, weights, bias);
       return _bytes;
     }
@@ -136,8 +141,6 @@ class FilterApplayer{
       for (int i = 0; i < weights.length; i++) {
         _weights[i] = weights[i];
       }
-      imageLib.Image image = params["image"];
-      List<int> _bytes = image.getBytes();
       Pointer<Uint8> _data = allocate(count: _bytes.length);
       for (int i = 0; i < _bytes.length; i++) {
         _data[i] = _bytes[i];

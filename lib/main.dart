@@ -46,7 +46,7 @@ class ImageFilterPage extends StatefulWidget {
 
 class _ImageFilterPageState extends State<ImageFilterPage> {
 
-  File imageFile;
+//  File imageFile;
   imageLib.Image image;
   String filename;
   Uint8List _bytesOrigin;
@@ -104,8 +104,8 @@ class _ImageFilterPageState extends State<ImageFilterPage> {
                  ..filename = filename
                  ..image = imageLib.copyResize(
                           image,
-                          width: image.width~/0.5,
-                          height: image.height~/0.5
+                          width: image.width~/calculateImageQuality(selectedQuality),
+                          height: image.height~/calculateImageQuality(selectedQuality)
                  )
                  ..programingOption = selectedProgramingOption,
              ),
@@ -120,14 +120,15 @@ class _ImageFilterPageState extends State<ImageFilterPage> {
   }
 
   Future getImage() async {
-    imageFile = await ImagePicker.pickImage(source: ImageSource.gallery);
+    var imageFile = await ImagePicker.pickImage(source: ImageSource.gallery);
     filename = basename(imageFile.path);
     image = imageLib.decodeImage(imageFile.readAsBytesSync());
-    //image = imageLib.copyResize(image, width: 300);
     _bytesOrigin = getPixels(image, filename);
     _bytesFilter = getFilterPixels(image, filename);
     setState(() {});
   }
+  
+  
 
   Widget _buildAlgorithmDropDown(){
     return Container(
@@ -253,6 +254,17 @@ class _ImageFilterPageState extends State<ImageFilterPage> {
     );
   }
 
+  calculateImageQuality(ImageQuality imageQuality){
+    switch(imageQuality) {
+      case ImageQuality.fifty_percent: return 0.5;
+      break;
+      case ImageQuality.teen_percent: return 0.1;
+      break;
+      case ImageQuality.hundred_percent: return 1.0;
+      break;
+    }
+  }
+
   imageQualityToSting(ImageQuality imageQuality){
     switch(imageQuality) {
       case ImageQuality.fifty_percent: return '50 %';
@@ -290,7 +302,7 @@ class _ImageFilterPageState extends State<ImageFilterPage> {
       break;
       case ProgramingOption.FFI: return 'FFI';
       break;
-      case ProgramingOption.GPU: return 'GPU';
+      case ProgramingOption.GPU: return 'GPU (don\'t implements )';
       break;
     }
   }
