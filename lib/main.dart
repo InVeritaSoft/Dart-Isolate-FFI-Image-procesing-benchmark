@@ -95,11 +95,14 @@ class _ImageFilterPageState extends State<ImageFilterPage> {
           if ((selectedQuality != null)
                 && (selectedAlgorithm != null)
                 && (selectedExecutionContext != null)
-                && (selectedProgramingOption != null))
+                && (selectedProgramingOption != null)
+                && (image != null)
+          )
              BenchmarkWidget(
                command: executionContextMap[selectedExecutionContext]
                  ..filename = filename
-                 ..image = image,
+                 ..image = imageLib.copyResize(image,width: 200)
+                 ..programingOption = selectedProgramingOption,
              ),
         ],
       ),

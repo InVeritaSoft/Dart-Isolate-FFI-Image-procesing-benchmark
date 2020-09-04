@@ -13,7 +13,6 @@ abstract class ExecutionContextCommand{
   String filename;
   ProgramingOption programingOption = ProgramingOption.pure_dart;
 
-
   Future execute();
 }
 
@@ -22,7 +21,7 @@ class MainThreadCommand extends ExecutionContextCommand{
   MainThreadCommand();
 
   Future execute() async{
-    applyFilter(<String, dynamic>{
+    FilterApplayer().applyFilter(<String, dynamic>{
       "image": image,
       "filename": filename,
       "programingOption": programingOption
@@ -36,7 +35,7 @@ class OneIsolateCommand extends ExecutionContextCommand{
   OneIsolateCommand();
 
   Future execute() async{
-    await compute(applyFilter,  <String,dynamic>{
+    await compute(FilterApplayer().applyFilter,  <String,dynamic>{
       "image": image,
       "filename": filename,
       "programingOption": programingOption
@@ -55,7 +54,7 @@ class ReusedIsolateCommand extends ExecutionContextCommand{
     sendPort.send(receivePort.sendPort);
     receivePort.listen((dynamic message) {
       final incomingMessage = message as ImageIsolateMessage;
-      incomingMessage.sender.send(applyFilter(incomingMessage.map));
+      incomingMessage.sender.send(FilterApplayer().applyFilter(incomingMessage.map));
     });
   }
 
@@ -104,7 +103,7 @@ class ReusedMultiIsolatesCommand extends ExecutionContextCommand{
 
     receivePort.listen((dynamic message) {
       final incomingMessage = message as ImageIsolateMessage;
-      incomingMessage.sender.send(applyFilter(incomingMessage.map));
+      incomingMessage.sender.send(FilterApplayer().applyFilter(incomingMessage.map));
     });
   }
 

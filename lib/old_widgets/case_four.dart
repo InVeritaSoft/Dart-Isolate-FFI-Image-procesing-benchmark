@@ -81,7 +81,7 @@ class _FourState extends State<Four> {
 
     receivePort.listen((dynamic message) {
       final incomingMessage = message as ImageIsolateMessage;
-      incomingMessage.sender.send(applyFilter(incomingMessage.map));
+      incomingMessage.sender.send(FilterApplayer().applyFilter(incomingMessage.map));
     });
   }
 

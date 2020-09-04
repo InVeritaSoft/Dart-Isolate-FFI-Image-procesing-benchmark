@@ -16,8 +16,10 @@ class BenchmarkWidget extends StatefulWidget {
 }
 
 class _BenchmarkWidgetState extends State<BenchmarkWidget> {
+
   var applyFilterPer10Second = 0;
   bool isStarted = false;
+
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +30,7 @@ class _BenchmarkWidgetState extends State<BenchmarkWidget> {
             onPressed: () {
               setState(() {
                 isStarted = !isStarted;
+                applyFilterPer10Second = 0;
                 _run();
               });
             }),
@@ -58,13 +61,6 @@ class _BenchmarkWidgetState extends State<BenchmarkWidget> {
     }
   }
 
-//  /// Main thread
-//  convertImage() async{
-//    applyFilter(<String, dynamic>{
-//      "image": widget.image,
-//      "filename": widget.filename,
-//    });
-//  }
 }
 
 
