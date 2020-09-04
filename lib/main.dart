@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:demo_2_images/benchmark_widget.dart';
 import 'package:demo_2_images/value.dart';
@@ -48,8 +49,8 @@ class _ImageFilterPageState extends State<ImageFilterPage> {
   File imageFile;
   imageLib.Image image;
   String filename;
-  List<int> _bytesOrigin;
-  List<int> _bytesFilter;
+  Uint8List _bytesOrigin;
+  Uint8List _bytesFilter;
 
   ImageQuality selectedQuality;
   Algorithm selectedAlgorithm;
@@ -101,7 +102,11 @@ class _ImageFilterPageState extends State<ImageFilterPage> {
              BenchmarkWidget(
                command: executionContextMap[selectedExecutionContext]
                  ..filename = filename
-                 ..image = imageLib.copyResize(image,width: 200)
+                 ..image = imageLib.copyResize(
+                          image,
+                          width: image.width~/0.5,
+                          height: image.height~/0.5
+                 )
                  ..programingOption = selectedProgramingOption,
              ),
         ],

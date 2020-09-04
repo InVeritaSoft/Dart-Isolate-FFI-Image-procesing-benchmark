@@ -5,25 +5,33 @@ import 'dart:typed_data';
 import 'package:demo_2_images/value.dart';
 import 'package:ffi/ffi.dart';
 import 'package:image/image.dart' as imageLib;
+import 'package:image/image.dart';
 import 'package:images_filter/images_filter.dart';
 import 'package:native_filters/native_filters.dart';
 
 final List<num> weights = [0, 1, 0, 1, -4, 1, 0, 1, 0];
 final num bias = 0.0;
 
-List<int> getPixels(image, filename) {
-  List<int> _bytes = image.getBytes();
-  imageLib.Image _image =
-  imageLib.Image.fromBytes(image.width, image.height, _bytes);
+Uint8List getPixels(image, filename) {
+  Uint8List _bytes = image.getBytes();
+  imageLib.Image _image = imageLib.Image.fromBytes(
+      image.width,
+      image.height,
+      _bytes,
+  );
   _bytes = imageLib.encodeNamedImage(_image, filename);
   return _bytes;
 }
 
-List<int> getFilterPixels(image, filename) {
-  List<int> _bytes = image.getBytes();
+Uint8List getFilterPixels(image, filename) {
+  Uint8List _bytes = image.getBytes();
   _apply(_bytes, image.width, image.height,weights,bias);
   imageLib.Image _image =
-  imageLib.Image.fromBytes(image.width, image.height, _bytes);
+  imageLib.Image.fromBytes(
+      image.width,
+      image.height,
+      _bytes,
+  );
   _bytes = imageLib.encodeNamedImage(_image, filename);
   return _bytes;
 }
@@ -43,6 +51,7 @@ int clampPixel(int x) => x.clamp(0, 255);
 void convolute(
     Uint8List pixels, int width, int height, List<num> weights, num bias) {
   var bytes = Uint8List.fromList(pixels);
+  //var bytes = pixels;
   int side = sqrt(weights.length).round();
   int halfSide = ~~(side / 2).round() - side % 2;
   int sw = width;
@@ -117,7 +126,7 @@ class FilterApplayer{
     ProgramingOption programingOption = params['programingOption'];
     if (programingOption == ProgramingOption.pure_dart) {
       imageLib.Image image = params["image"];
-      List<int> _bytes = image.getBytes();
+      var _bytes = image.getBytes();
       _apply(_bytes, image.width, image.height, weights, bias);
       return _bytes;
     }
@@ -128,7 +137,7 @@ class FilterApplayer{
         _weights[i] = weights[i];
       }
       imageLib.Image image = params["image"];
-      List<int> _bytes = params["image"].getBytes();
+      List<int> _bytes = image.getBytes();
       Pointer<Uint8> _data = allocate(count: _bytes.length);
       for (int i = 0; i < _bytes.length; i++) {
         _data[i] = _bytes[i];
