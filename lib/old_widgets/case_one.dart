@@ -54,7 +54,7 @@ class _OneState extends State<One> {
 
   /// Main thread
   void convertImage() {
-    FilterApplayer().applyFilter(<String, dynamic>{
+    applyFilter(<String, dynamic>{
       "image": widget.image,
       "filename": widget.filename,
     });

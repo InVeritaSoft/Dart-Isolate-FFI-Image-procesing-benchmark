@@ -69,7 +69,7 @@ class _ThreeState extends State<Three> {
 
     receivePort.listen((dynamic message) {
       final incomingMessage = message as ImageIsolateMessage;
-      incomingMessage.sender.send(FilterApplayer().applyFilter(incomingMessage.map));
+      incomingMessage.sender.send(applyFilter(incomingMessage.map));
     });
   }
 

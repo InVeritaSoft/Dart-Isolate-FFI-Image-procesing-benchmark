@@ -81,10 +81,10 @@ void convolute( int* pixels,int pixels_lenght, int width, int height,
 uint8_t * convolute1(uint8_t * pixels,int pixels_lenght, int width, int height,
                      int8_t* weights,int weights_length, float bias
                 ) {
-  uint8_t bytes[pixels_lenght];
-  for (int i = 0; i < pixels_lenght; i++) {
-      bytes[i] = pixels[i];
-  }
+  uint8_t* bytes = pixels;
+//  for (int i = 0; i < pixels_lenght; i++) {
+//      bytes[i] = pixels[i];
+//  }
     
   int side = round(sqrt((double)weights_length));
   int halfSide = roundf((float)(~~(side / 2))) - side % 2;

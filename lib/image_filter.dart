@@ -1,4 +1,5 @@
 import 'dart:ffi';
+import 'dart:isolate';
 import 'dart:math';
 import 'dart:typed_data';
 
@@ -6,6 +7,8 @@ import 'package:demo_2_images/value.dart';
 import 'package:ffi/ffi.dart';
 import 'package:image/image.dart' as imageLib;
 import 'package:images_filter/images_filter.dart';
+
+import 'image_holder.dart';
 //import 'package:native_filters/native_filters.dart';
 
 final List<num> weights = [0, 1, 0, 1, -4, 1, 0, 1, 0];
@@ -101,68 +104,47 @@ List<num> _normalizeKernel(List<num> kernel) {
 }
 
 
-
-class FilterApplayer{
-
-//  final _filtersFactory = const FilterFactory();
-//  Filter _filter;
-
-  static final FilterApplayer _singleton = FilterApplayer._internal();
-
-  factory FilterApplayer() {
-    return _singleton;
-  }
-
-  FilterApplayer._internal();
-
-//  init() async{
-//    _filter = await _filtersFactory.create('GPUImageLaplacianFilter');
+List<int> applyFilter(Map<String, dynamic> params) {
+  ProgramingOption programingOption = params['programingOption'];
+  imageLib.Image image = params["image"];
+  Uint8List _bytes = image.getBytes();
+//  var cacheImage = Imageholder().cacheImage;
+//  if(image.width != cacheImage?.width){
+//    print('Caching images');
+//    Imageholder().cacheImage = image;
+//    _bytes = image.getBytes();
+//    Imageholder().bytes = _bytes;
 //  }
 
-  imageLib.Image cacheImage;
-  Uint8List _bytes;
+  if (programingOption == ProgramingOption.pure_dart) {
+    _apply(_bytes, image.width, image.height, weights, bias);
+    return _bytes;
+  }
 
-  List<int> applyFilter(Map<String, dynamic> params) {
-    ProgramingOption programingOption = params['programingOption'];
-    imageLib.Image image = params["image"];
-    if(image.width != cacheImage?.width){
-      print('Caching images');
-      cacheImage = image;
-      _bytes = image.getBytes();
+  if (programingOption == ProgramingOption.FFI) {
+    Pointer<Int8> _weights = allocate(count: weights.length);
+    for (int i = 0; i < weights.length; i++) {
+      _weights[i] = weights[i];
     }
-
-    if (programingOption == ProgramingOption.pure_dart) {
-      _apply(_bytes, image.width, image.height, weights, bias);
-      return _bytes;
+    Pointer<Uint8> _data = allocate(count: _bytes.length);
+    for (int i = 0; i < _bytes.length; i++) {
+      _data[i] = _bytes[i];
     }
+    var result = ImagesFilter().applyImageFilter(
+        _data,
+        _bytes.length,
+        image.width,
+        image.height,
+        _weights,
+        weights.length,
+        bias);
+    result.asTypedList(_bytes.length);
+    free(_data);
+    free(_weights);
+    return result.asTypedList(_bytes.length,);
+  }
+  if (programingOption == ProgramingOption.GPU) {
+      return <int>[];
 
-    if (programingOption == ProgramingOption.FFI) {
-      Pointer<Int8> _weights = allocate(count: weights.length);
-      for (int i = 0; i < weights.length; i++) {
-        _weights[i] = weights[i];
-      }
-      Pointer<Uint8> _data = allocate(count: _bytes.length);
-      for (int i = 0; i < _bytes.length; i++) {
-        _data[i] = _bytes[i];
-      }
-      var result = ImagesFilter().applyImageFilter(
-          _data,
-          _bytes.length,
-          image.width,
-          image.height,
-          _weights,
-          weights.length,
-          bias);
-      result.asTypedList(_bytes.length);
-      free(_data);
-      free(_weights);
-      return result.asTypedList(_bytes.length,);
-    }
-    if (programingOption == ProgramingOption.GPU) {
-
-
-    }
   }
 }
-
-

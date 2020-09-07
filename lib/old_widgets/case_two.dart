@@ -55,7 +55,7 @@ class _TwoState extends State<Two> {
 
   /// Isolate
   Future<void> convertImage() async {
-    await compute(FilterApplayer().applyFilter,  <String,dynamic>{
+    await compute(applyFilter,  <String,dynamic>{
       "image": widget.image,
       "filename": widget.filename,
     });
