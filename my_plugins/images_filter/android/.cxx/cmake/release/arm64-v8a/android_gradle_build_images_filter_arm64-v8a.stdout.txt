@@ -1,2 +1,1 @@
-[1/2] Building CXX object CMakeFiles/images_filter.dir/Users/nazarko/FlutterProjects/demo_2_images/my_plugins/images_filter/ios/Classes/images_filter.cpp.o
-[2/2] Linking CXX shared library /Users/nazarko/FlutterProjects/demo_2_images/build/images_filter/intermediates/cmake/release/obj/arm64-v8a/libimages_filter.so
+ninja: no work to do.

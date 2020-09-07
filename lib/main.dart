@@ -1,7 +1,6 @@
-import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:demo_2_images/benchmark_widget.dart';
+import 'package:demo_2_images/preview_screen.dart';
 import 'package:demo_2_images/value.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -9,12 +8,6 @@ import 'package:image/image.dart' as imageLib;
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 
-import 'old_widgets/case_four.dart';
-import 'old_widgets/case_one.dart';
-import 'old_widgets/case_three.dart';
-import 'old_widgets/case_two.dart';
-import 'old_widgets/ffi_one.dart';
-import 'image_filter.dart';
 
 void main() {
   runApp(MyApp());
@@ -46,11 +39,9 @@ class ImageFilterPage extends StatefulWidget {
 
 class _ImageFilterPageState extends State<ImageFilterPage> {
 
-//  File imageFile;
+
   imageLib.Image image;
   String filename;
-  Uint8List _bytesOrigin;
-  Uint8List _bytesFilter;
 
   ImageQuality selectedQuality;
   Algorithm selectedAlgorithm;
@@ -67,27 +58,22 @@ class _ImageFilterPageState extends State<ImageFilterPage> {
       body:  Column(
         mainAxisSize: MainAxisSize.max,
         children: [
-          Container(
-            height: image != null ? 200 : 0.0,
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                if (_bytesOrigin != null)
-                  Expanded(
-                      child: Image.memory(
-                        _bytesOrigin,
-                        fit: BoxFit.contain,
-                      )),
-                if (_bytesOrigin != null)
-                  Expanded(
-                      child: Image.memory(
-                        _bytesFilter,
-                        fit: BoxFit.contain,
-                      ))
-              ],
-            ),
-          ),
+         if (filename != null)
+           Padding(
+             padding: const EdgeInsets.all(8.0),
+             child: Center(child: Text('File  : $filename')),
+           ),
+          if (filename != null)RaisedButton(
+            child: Text('Image Preview'),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => PreviewImageScreen(
+                    image,filename
+                )
+                ),
+              );
+            }),
           _buildQualityDropDown(),
           _buildAlgorithmDropDown(),
           _buildExecutionContextDropDown(),
@@ -104,8 +90,8 @@ class _ImageFilterPageState extends State<ImageFilterPage> {
                  ..filename = filename
                  ..image = imageLib.copyResize(
                           image,
-                          width: image.width~/calculateImageQuality(selectedQuality),
-                          height: image.height~/calculateImageQuality(selectedQuality)
+                          width: (image.width * calculateImageQuality(selectedQuality)).ceil(),
+                          height: (image.height * calculateImageQuality(selectedQuality)).ceil()
                  )
                  ..programingOption = selectedProgramingOption,
              ),
@@ -123,8 +109,8 @@ class _ImageFilterPageState extends State<ImageFilterPage> {
     var imageFile = await ImagePicker.pickImage(source: ImageSource.gallery);
     filename = basename(imageFile.path);
     image = imageLib.decodeImage(imageFile.readAsBytesSync());
-    _bytesOrigin = getPixels(image, filename);
-    _bytesFilter = getFilterPixels(image, filename);
+    //_bytesOrigin = getPixels(image, filename);
+    //_bytesFilter = getFilterPixels(image, filename);
     setState(() {});
   }
   
