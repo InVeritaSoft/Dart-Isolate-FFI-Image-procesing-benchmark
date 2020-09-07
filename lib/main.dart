@@ -47,6 +47,7 @@ class _ImageFilterPageState extends State<ImageFilterPage> {
   Algorithm selectedAlgorithm;
   ExecutionContext selectedExecutionContext;
   ProgramingOption selectedProgramingOption;
+  int selectIsolatesPoolSize = 8;
 
 
   @override
@@ -77,7 +78,10 @@ class _ImageFilterPageState extends State<ImageFilterPage> {
           _buildQualityDropDown(),
           _buildAlgorithmDropDown(),
           _buildExecutionContextDropDown(),
+          if(selectedExecutionContext == ExecutionContext.reusedMultiIsolates)
+            _buildCountIsolatesDropDown(),
           _buildProgramingOptionDropDown(),
+
       
           if ((selectedQuality != null)
                 && (selectedAlgorithm != null)
@@ -109,8 +113,6 @@ class _ImageFilterPageState extends State<ImageFilterPage> {
     var imageFile = await ImagePicker.pickImage(source: ImageSource.gallery);
     filename = basename(imageFile.path);
     image = imageLib.decodeImage(imageFile.readAsBytesSync());
-    //_bytesOrigin = getPixels(image, filename);
-    //_bytesFilter = getFilterPixels(image, filename);
     setState(() {});
   }
   
@@ -240,6 +242,37 @@ class _ImageFilterPageState extends State<ImageFilterPage> {
     );
   }
 
+  Widget _buildCountIsolatesDropDown(){
+    return Container(
+      height: 50,
+      padding: EdgeInsets.all(8.0),
+      child: DropdownButtonHideUnderline(
+        child: ButtonTheme(
+          alignedDropdown: true,
+          child: DropdownButton<int>(
+            isExpanded: true,
+            hint:  Text("Select pool size"),
+            value: selectIsolatesPoolSize,
+            onChanged: (int value) {
+              setState(() {
+                selectIsolatesPoolSize = value;
+              });
+            },
+            items: List<int>.generate(10, (i) => i + 1).map((int value) {
+              return  DropdownMenuItem<int>(
+                value: value,
+                child: Text(
+                  '$value isolates',
+                  style:  TextStyle(color: Colors.black),
+                ),
+              );
+            }).toList(),
+          ),
+        ),
+      ),
+    );
+  }
+
   calculateImageQuality(ImageQuality imageQuality){
     switch(imageQuality) {
       case ImageQuality.fifty_percent: return 0.5;
@@ -294,79 +327,3 @@ class _ImageFilterPageState extends State<ImageFilterPage> {
   }
 
 }
-
-
-
-//
-//class MyHomePage extends StatefulWidget {
-//  MyHomePage({Key key, this.title}) : super(key: key);
-//  final String title;
-//
-//  @override
-//  _MyHomePageState createState() => _MyHomePageState();
-//}
-//
-//class _MyHomePageState extends State<MyHomePage> {
-//  File imageFile;
-//  imageLib.Image image;
-//  String filename;
-//  List<int> _bytesOrigin;
-//  List<int> _bytesFilter;
-//
-//  @override
-//  Widget build(BuildContext context) {
-//    return Scaffold(
-//      appBar: AppBar(
-//        title: Text(widget.title),
-//      ),
-//      body: Column(
-//        mainAxisAlignment: MainAxisAlignment.start,
-//        children: <Widget>[
-//          Row(
-//            children: [
-//              if (_bytesOrigin != null)
-//                Flexible(
-//                    child: SizedBox(
-//                  height: 200,
-//                  child: Image.memory(
-//                    _bytesOrigin,
-//                    fit: BoxFit.contain,
-//                  ),
-//                )),
-//              if (_bytesOrigin != null)
-//                Flexible(
-//                    child: SizedBox(
-//                  height: 200,
-//                  child: Image.memory(
-//                    _bytesFilter,
-//                    fit: BoxFit.contain,
-//                  ),
-//                ))
-//            ],
-//          ),
-//          Spacer(),
-//          One(
-//            image: image,
-//            filename: filename,
-//          ),
-//          Spacer(),
-//        ],
-//      ),
-//      floatingActionButton: FloatingActionButton(
-//        onPressed: getImage,
-//        tooltip: 'getImage',
-//        child: Icon(Icons.camera_alt),
-//      ), // This trailing comma makes auto-formatting nicer for build methods.
-//    );
-//  }
-//
-//  Future getImage() async {
-//    imageFile = await ImagePicker.pickImage(source: ImageSource.gallery);
-//    filename = basename(imageFile.path);
-//    image = imageLib.decodeImage(imageFile.readAsBytesSync());
-//    image = imageLib.copyResize(image, width: 300);
-//    _bytesOrigin = getPixels(image, filename);
-//    _bytesFilter = getFilterPixels(image, filename);
-//    setState(() {});
-//  }
-//}
