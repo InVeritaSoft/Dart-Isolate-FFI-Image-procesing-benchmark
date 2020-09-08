@@ -8,9 +8,6 @@ import 'package:ffi/ffi.dart';
 import 'package:image/image.dart' as imageLib;
 import 'package:images_filter/images_filter.dart';
 
-import 'image_holder.dart';
-//import 'package:native_filters/native_filters.dart';
-
 final List<num> weights = [0, 1, 0, 1, -4, 1, 0, 1, 0];
 final num bias = 0.0;
 

@@ -86,6 +86,8 @@ class ReusedMultiIsolatesCommand extends ExecutionContextCommand{
 
   ReusedMultiIsolatesCommand();
 
+  static int  poolSize = 8;
+
   static List<SendPort> availableSendPorts;
   static final sendPortStream = StreamController<void>.broadcast();
 
@@ -109,16 +111,9 @@ class ReusedMultiIsolatesCommand extends ExecutionContextCommand{
   }
 
   static Future<void> init() async {
-    availableSendPorts = await Future.wait([
-      intialize(),
-      intialize(),
-      intialize(),
-      intialize(),
-      intialize(),
-      intialize(),
-      intialize(),
-      intialize(),
-    ]);
+    availableSendPorts = await Future.wait(
+        List<int>.generate(poolSize, (i) => i + 1).map((e) => intialize(),)
+    );
   }
 
   Future<void> execute() async {
