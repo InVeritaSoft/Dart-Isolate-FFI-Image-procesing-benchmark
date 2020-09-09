@@ -82,6 +82,7 @@ class ReusedIsolateCommand extends ExecutionContextCommand{
   }
 }
 
+
 class ReusedMultiIsolatesCommand extends ExecutionContextCommand{
 
   ReusedMultiIsolatesCommand();
@@ -140,7 +141,6 @@ class ReusedMultiIsolatesCommand extends ExecutionContextCommand{
 }
 
 class ImageIsolateMessage {
-
   final SendPort sender;
   final Map<String, dynamic> map;
 

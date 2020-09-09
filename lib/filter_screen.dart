@@ -1,4 +1,6 @@
 
+import 'dart:typed_data';
+import 'package:flutter/services.dart';
 import 'package:demo_2_images/benchmark_widget.dart';
 import 'package:demo_2_images/preview_screen.dart';
 import 'package:demo_2_images/utils.dart';
@@ -8,7 +10,7 @@ import 'package:flutter/widgets.dart';
 import 'package:path/path.dart';
 import 'package:image/image.dart' as imageLib;
 import 'package:image_picker/image_picker.dart';
-
+import 'dart:io' show Platform;
 import 'commands.dart';
 
 class ImageFilterScreen extends StatefulWidget {
@@ -91,10 +93,28 @@ class _ImageFilterScreenState extends State<ImageFilterScreen> {
   }
 
   Future getImage() async {
-    var imageFile = await ImagePicker.pickImage(source: ImageSource.gallery);
-    filename = basename(imageFile.path);
-    image = imageLib.decodeImage(imageFile.readAsBytesSync());
-    setState(() {});
+
+
+    if (Platform.isAndroid || Platform.isIOS) {
+      var imageFile = await ImagePicker.pickImage(source: ImageSource.gallery);
+      filename = basename(imageFile.path);
+      image = imageLib.decodeImage(imageFile.readAsBytesSync());
+      setState(() {});
+      return;
+    }
+
+    if(Platform.isMacOS || Platform.isLinux || Platform.isWindows){
+      filename = 'assets/images/mona_lisa.jpg';
+      ByteData monaLisaData = await rootBundle.load(filename);
+      Uint8List monaLisaBytes = monaLisaData.buffer.asUint8List();
+      image = imageLib.decodeImage(monaLisaBytes);
+      setState(() {});
+      return;
+    }
+
+
+
+
   }
 
 
@@ -239,7 +259,7 @@ class _ImageFilterScreenState extends State<ImageFilterScreen> {
                 ReusedMultiIsolatesCommand.poolSize = value;
               });
             },
-            items: List<int>.generate(10, (i) => i + 1).map((int value) {
+            items: List<int>.generate(20, (i) => i + 1).map((int value) {
               return  DropdownMenuItem<int>(
                 value: value,
                 child: Text(

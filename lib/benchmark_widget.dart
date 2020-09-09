@@ -18,7 +18,7 @@ class BenchmarkWidget extends StatefulWidget {
 class _BenchmarkWidgetState extends State<BenchmarkWidget> {
 
   var applyFilterPer10Second = 0;
-  bool isStarted = false;
+  bool isRunning = false;
 
 
   @override
@@ -26,15 +26,15 @@ class _BenchmarkWidgetState extends State<BenchmarkWidget> {
     return Column(
       children: [
         RaisedButton(
-            child: Text(!isStarted ? 'Start' : 'Stop'),
+            child: Text(!isRunning ? 'Start' : 'Stop'),
             onPressed: () {
               setState(() {
-                isStarted = !isStarted;
+                isRunning = !isRunning;
                 applyFilterPer10Second = 0;
                 _run();
               });
             }),
-        if (isStarted)
+        if (isRunning)
         Text(
           'Apply filter per 10 Seconds: $applyFilterPer10Second',
         ),
@@ -45,8 +45,10 @@ class _BenchmarkWidgetState extends State<BenchmarkWidget> {
   Future<void> _run() async {
     var lastFrameTime = DateTime.now().millisecondsSinceEpoch;
     var parses = 0;
-    while (isStarted) {
+    while (isRunning) {
+
       await widget.command.execute();
+
       parses++;
       final time = DateTime.now().millisecondsSinceEpoch;
       if ((time - lastFrameTime) > (10000 + 1)) {
