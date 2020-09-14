@@ -27,7 +27,9 @@ class _ImageFilterScreenState extends State<ImageFilterScreen> {
   imageLib.Image image;
   String filename;
 
-  ImageQuality selectedQuality;
+
+  int selectedQuality;
+  //ImageQuality selectedQuality;
   Algorithm selectedAlgorithm;
   ExecutionContext selectedExecutionContext;
   ProgramingOption selectedProgramingOption;
@@ -77,8 +79,8 @@ class _ImageFilterScreenState extends State<ImageFilterScreen> {
                 ..filename = filename
                 ..image = imageLib.copyResize(
                     image,
-                    width: (image.width * calculateImageQuality(selectedQuality)).ceil(),
-                    height: (image.height * calculateImageQuality(selectedQuality)).ceil()
+                    width: (image.width * selectedQuality/100).ceil(),
+                    height: (image.height * selectedQuality/100).ceil()
                 )
                 ..programingOption = selectedProgramingOption,
             ),
@@ -157,20 +159,21 @@ class _ImageFilterScreenState extends State<ImageFilterScreen> {
       child: DropdownButtonHideUnderline(
         child: ButtonTheme(
           alignedDropdown: true,
-          child: DropdownButton<ImageQuality>(
+          child: DropdownButton<int>(
             isExpanded: true,
             hint:  Text("Select image quality"),
             value: selectedQuality,
-            onChanged: (ImageQuality value) {
+            onChanged: (int value) {
               setState(() {
+                print(value);
                 selectedQuality = value;
               });
             },
-            items: <ImageQuality>[...ImageQuality.values].map((ImageQuality quality) {
-              return  DropdownMenuItem<ImageQuality>(
+            items: List<int>.generate(10, (i) => i * 10 + 10).map((int quality) {
+              return  DropdownMenuItem<int>(
                 value: quality,
                 child: Text(
-                  imageQualityToSting(quality),
+                  '$quality %',
                   style:  TextStyle(color: Colors.black),
                 ),
               );

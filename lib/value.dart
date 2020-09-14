@@ -1,10 +1,10 @@
 import 'commands.dart';
 
-enum ImageQuality{
-  teen_percent,
-  fifty_percent,
-  hundred_percent
-}
+//enum ImageQuality{
+//  teen_percent,
+//  fifty_percent,
+//  hundred_percent
+//}
 
 enum Algorithm{
   laplacian_edge_detection

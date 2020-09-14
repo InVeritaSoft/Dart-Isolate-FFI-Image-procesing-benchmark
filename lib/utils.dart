@@ -2,27 +2,27 @@
 
 import 'package:demo_2_images/value.dart';
 
-calculateImageQuality(ImageQuality imageQuality){
-  switch(imageQuality) {
-    case ImageQuality.fifty_percent: return 0.5;
-    break;
-    case ImageQuality.teen_percent: return 0.1;
-    break;
-    case ImageQuality.hundred_percent: return 1.0;
-    break;
-  }
-}
-
-imageQualityToSting(ImageQuality imageQuality){
-  switch(imageQuality) {
-    case ImageQuality.fifty_percent: return '50 %';
-    break;
-    case ImageQuality.teen_percent: return '10 %';
-    break;
-    case ImageQuality.hundred_percent: return '100 %';
-    break;
-  }
-}
+//calculateImageQuality(ImageQuality imageQuality){
+//  switch(imageQuality) {
+//    case ImageQuality.fifty_percent: return 0.5;
+//    break;
+//    case ImageQuality.teen_percent: return 0.1;
+//    break;
+//    case ImageQuality.hundred_percent: return 1.0;
+//    break;
+//  }
+//}
+//
+//imageQualityToSting(ImageQuality imageQuality){
+//  switch(imageQuality) {
+//    case ImageQuality.fifty_percent: return '50 %';
+//    break;
+//    case ImageQuality.teen_percent: return '10 %';
+//    break;
+//    case ImageQuality.hundred_percent: return '100 %';
+//    break;
+//  }
+//}
 
 executionContextToSting(ExecutionContext executionContext){
   switch(executionContext) {
